@@ -7,6 +7,8 @@ public class WayManager : MonoBehaviour
     public static WayManager instance;
 
     [SerializeField] private GameObject _wayPrefab;
+    [SerializeField] private List<GameObject> _enemysPrefab;
+
     private int _wayCount;
     private float distance = 45f;
 
@@ -29,9 +31,40 @@ public class WayManager : MonoBehaviour
             _wayCount++;
             return Vector3.zero;
         }
+
         var pos = Vector3.forward * _wayCount * distance;
         _wayCount++;
 
+        if (_wayCount > 3)
+            CreatEnemy();
+
         return pos;
+    }
+    private void CreatEnemy()
+    {
+        var rnd = Random.Range(0, 10);
+        if (rnd < 3)
+        {
+            var rnd2 = Random.Range((_wayCount - 1) * distance, _wayCount * distance);
+
+            switch (rnd % 3)
+            {
+                case 0:
+                    Instantiate(_enemysPrefab[Random.Range(0, _enemysPrefab.Count)], new Vector3(0, 0, rnd2), Quaternion.identity);
+
+                    break;
+                case 1:
+                    Instantiate(_enemysPrefab[Random.Range(0, _enemysPrefab.Count)], new Vector3(5, 0, rnd2), Quaternion.identity);
+
+                    break;
+                case 2:
+                    Instantiate(_enemysPrefab[Random.Range(0, _enemysPrefab.Count)], new Vector3(-5, 0, rnd2), Quaternion.identity);
+
+                    break;
+                default:
+                    break;
+
+            }
+        }
     }
 }
