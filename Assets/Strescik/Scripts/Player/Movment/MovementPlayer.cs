@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class MovementWay : MonoBehaviour
+public class MovementPlayer : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _turnSpeed = .2f;
@@ -30,14 +30,14 @@ public class MovementWay : MonoBehaviour
 
         Sequence sequence = DOTween.Sequence();
 
-        if (Input.GetKeyDown(KeyCode.D) && gameObject.transform.position.x < 5)//5
+        if (Input.GetKeyDown(KeyCode.D) && gameObject.transform.position.x < 5)
         {
             _isTurning = true;
 
             sequence.Append(transform.DOMoveX(gameObject.transform.position.x + 5, _turnSpeed))
                 .AppendCallback(() => _isTurning = false);
         }
-        else if (Input.GetKeyDown(KeyCode.A) && gameObject.transform.position.x > -5)//-5
+        else if (Input.GetKeyDown(KeyCode.A) && gameObject.transform.position.x > -5)
         {
             _isTurning = true;
 
@@ -47,4 +47,12 @@ public class MovementWay : MonoBehaviour
         }
     }
 
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Enemy"))
+        {
+            _isMoving = false;
+        }
+    }
 }
