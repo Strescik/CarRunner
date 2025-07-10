@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class WayManager : MonoBehaviour
 {
     public static WayManager instance;
 
     [SerializeField] private GameObject _wayPrefab;
-    [SerializeField] private List<GameObject> _enemysPrefab;
+    [SerializeField] private List<GameObject> _staticEnemysPrefab;
+    [SerializeField] private List<GameObject> _dynamicEnemysPrefab;
+    [SerializeField] private byte _startWayCount;
 
     private int _wayCount;
     private float distance = 45f;
@@ -18,7 +22,7 @@ public class WayManager : MonoBehaviour
             Destroy(instance);
         instance = this;
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < _startWayCount; i++)
         {
             Instantiate(_wayPrefab, NewPosition(), Quaternion.identity);
         }
@@ -36,29 +40,29 @@ public class WayManager : MonoBehaviour
         _wayCount++;
 
         if (_wayCount > 3)
-            CreatEnemy();
+            CreatStaticEnemy();
 
         return pos;
     }
-    private void CreatEnemy()
+    private void CreatStaticEnemy()
     {
         var rnd = Random.Range(0, 10);
         if (rnd < 3)
         {
-            var rnd2 = Random.Range((_wayCount - 1) * distance, _wayCount * distance);
+            var rndZPos = Random.Range((_wayCount - 1) * distance, _wayCount * distance);
 
             switch (rnd % 3)
             {
                 case 0:
-                    Instantiate(_enemysPrefab[Random.Range(0, _enemysPrefab.Count)], new Vector3(0, 0, rnd2), Quaternion.identity);
+                    Instantiate(_staticEnemysPrefab[Random.Range(0, _staticEnemysPrefab.Count)], new Vector3(0, 0, rndZPos), Quaternion.identity);
 
                     break;
                 case 1:
-                    Instantiate(_enemysPrefab[Random.Range(0, _enemysPrefab.Count)], new Vector3(5, 0, rnd2), Quaternion.identity);
+                    Instantiate(_staticEnemysPrefab[Random.Range(0, _staticEnemysPrefab.Count)], new Vector3(5, 0, rndZPos), Quaternion.identity);
 
                     break;
                 case 2:
-                    Instantiate(_enemysPrefab[Random.Range(0, _enemysPrefab.Count)], new Vector3(-5, 0, rnd2), Quaternion.identity);
+                    Instantiate(_staticEnemysPrefab[Random.Range(0, _staticEnemysPrefab.Count)], new Vector3(-5, 0, rndZPos), Quaternion.identity);
 
                     break;
                 default:
@@ -66,5 +70,36 @@ public class WayManager : MonoBehaviour
 
             }
         }
+
+        rnd = Random.Range(0, 10);
+
+        if (rnd < 8 && rnd >= 0)
+        {
+            CreatDynamicEnemy(rnd);
+        }
     }
+
+    private void CreatDynamicEnemy(int value)
+    {
+        var rndZPos = Random.Range((_wayCount - 1) * distance, _wayCount * distance);
+        switch (value % 3)
+        {
+            case 0:
+                Instantiate(_dynamicEnemysPrefab[Random.Range(0, _dynamicEnemysPrefab.Count)], new Vector3(0, 0, rndZPos), Quaternion.identity);
+
+                break;
+            case 1:
+                Instantiate(_dynamicEnemysPrefab[Random.Range(0, _dynamicEnemysPrefab.Count)], new Vector3(5, 0, rndZPos), Quaternion.identity);
+
+                break;
+            case 2:
+                Instantiate(_dynamicEnemysPrefab[Random.Range(0, _dynamicEnemysPrefab.Count)], new Vector3(-5, 0, rndZPos), Quaternion.identity);
+
+                break;
+            default:
+                break;
+
+        }
+    }
+
 }
