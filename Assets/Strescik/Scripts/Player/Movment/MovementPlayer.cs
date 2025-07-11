@@ -52,7 +52,15 @@ public class MovementPlayer : MonoBehaviour
     {
         if (collision.transform.CompareTag("Enemy"))
         {
-            _isMoving = false;
+            //_isMoving = false;
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Gold"))
+        {
+            Debug.Log("Gold alýndý");
+            other.gameObject.SetActive(false);
         }
     }
 }

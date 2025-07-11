@@ -102,4 +102,5 @@ public class WayManager : MonoBehaviour
         }
     }
 
+
 }
