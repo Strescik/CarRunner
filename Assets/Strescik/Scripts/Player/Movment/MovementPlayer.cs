@@ -3,26 +3,34 @@ using UnityEngine;
 
 public class MovementPlayer : MonoBehaviour
 {
+    [SerializeField] GameManager gameManager;
+
     [SerializeField] private float _speed;
     [SerializeField] private float _turnSpeed = .2f;
 
     private bool _isMoving = true;
     [SerializeField] private bool _isTurning = false;
 
+    private void FixedUpdate()
+    {
+        if (!_isMoving)
+            return;
+        gameManager.SetPoint(transform.position.z);
+    }
     private void Update()
     {
+        if (!_isMoving)
+            return;
         DefultMove();
     }
 
     private void DefultMove()
     {
-        if (!_isMoving)
-            return;
+
 
         gameObject.transform.Translate(Vector3.forward * _speed * Time.deltaTime);
         TurnMotion();
     }
-
     private void TurnMotion()
     {
         if (_isTurning)
@@ -52,14 +60,16 @@ public class MovementPlayer : MonoBehaviour
     {
         if (collision.transform.CompareTag("Enemy"))
         {
+            //oyun bitti
             //_isMoving = false;
+
         }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Gold"))
         {
-            Debug.Log("Gold alýndý");
+            GameManager.instance.AddGold();
             other.gameObject.SetActive(false);
         }
     }
