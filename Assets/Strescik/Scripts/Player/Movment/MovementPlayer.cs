@@ -26,16 +26,13 @@ public class MovementPlayer : MonoBehaviour
 
     private void DefultMove()
     {
-
-
-        gameObject.transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+        gameObject.transform.Translate(Vector3.forward * _speed * gameManager.lvSpeed * Time.deltaTime);
         TurnMotion();
     }
     private void TurnMotion()
     {
         if (_isTurning)
             return;
-
         Sequence sequence = DOTween.Sequence();
 
         if (Input.GetKeyDown(KeyCode.D) && gameObject.transform.position.x < 5)

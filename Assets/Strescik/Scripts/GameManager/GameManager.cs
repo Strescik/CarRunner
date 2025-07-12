@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     private int point;
     private int gold;
+    public float lvSpeed { get; private set; } = 2;
 
     private void Awake()
     {
@@ -27,9 +28,11 @@ public class GameManager : MonoBehaviour
         point = (gold * 10) + (int)(playerPositionZ * 5);
         skorText.text = point.ToString();
     }
+    internal void UpLvSpeed() => lvSpeed += .1f;
     internal void ResetProperty()
     {
         point = 0;
         gold = 0;
+        lvSpeed = 1;
     }
 }

@@ -41,6 +41,8 @@ public class WayManager : MonoBehaviour
 
         if (_wayCount > 3)
             CreatStaticEnemy();
+        if (_wayCount % 5 == 0 && GameManager.instance.lvSpeed <= 4)
+            GameManager.instance.UpLvSpeed();
 
         return pos;
     }
