@@ -7,7 +7,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [SerializeField] TextMeshProUGUI skorText;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI bestScoreText;
+    [SerializeField] TextMeshProUGUI newScoreText;
+    [SerializeField] TextMeshProUGUI inGameGoldText;
+    [SerializeField] TextMeshProUGUI totalGoldText;
+
+    [SerializeField] GameObject fnishPanel;
+    [SerializeField] GameObject gamePanel;
+
+    [SerializeField] internal MovementPlayer player;
 
     private int point;
     private int gold;
@@ -22,17 +31,55 @@ public class GameManager : MonoBehaviour
     }
 
 
-    internal void AddGold() => gold++;
+    internal void AddGold()
+    {
+        gold++;
+        inGameGoldText.text = gold.ToString();
+    }
+
     internal void SetPoint(float playerPositionZ)
     {
         point = (gold * 10) + (int)(playerPositionZ * 5);
-        skorText.text = point.ToString();
+        scoreText.text = point.ToString();
     }
     internal void UpLvSpeed() => lvSpeed += .1f;
-    internal void ResetProperty()
+
+    public void ResetProperty()
     {
         point = 0;
         gold = 0;
-        lvSpeed = 1;
+        lvSpeed = 2;
+
+        scoreText.text = "0";
+        inGameGoldText.text = "0";
+
+        player.transform.position = Vector3.zero;
+    }
+
+
+    internal void GameOver()
+    {
+        player.SetIsMoving(false);
+        if (!PlayerPrefs.HasKey("BestScore"))
+        {
+            PlayerPrefs.SetInt("BestScore", point);
+        }
+        else if (point > PlayerPrefs.GetInt("BestScore"))
+        {
+            PlayerPrefs.SetInt("BestScore", point);
+        }
+        var totalGold = PlayerPrefs.GetInt("Gold") + gold;
+
+        PlayerPrefs.SetInt("Gold", totalGold);
+        PlayerPrefs.Save();
+
+        totalGoldText.text = PlayerPrefs.GetInt("Gold").ToString();
+        newScoreText.text = $"New Score\n{point.ToString()}";
+        bestScoreText.text = $"Best Score\n {PlayerPrefs.GetInt("BestScore")}";
+
+
+
+        fnishPanel.SetActive(true);
+        gamePanel.SetActive(false);
     }
 }

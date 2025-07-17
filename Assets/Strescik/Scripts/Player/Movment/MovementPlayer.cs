@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class MovementPlayer : MonoBehaviour
@@ -8,7 +9,7 @@ public class MovementPlayer : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _turnSpeed = .2f;
 
-    private bool _isMoving = true;
+    private bool _isMoving = false;
     [SerializeField] private bool _isTurning = false;
 
     private void FixedUpdate()
@@ -23,7 +24,8 @@ public class MovementPlayer : MonoBehaviour
             return;
         DefultMove();
     }
-
+    internal void SetIsMoving(bool value) => _isMoving = value;
+    internal void WaitToMove() => StartCoroutine(PauseToPlay());
     private void DefultMove()
     {
         gameObject.transform.Translate(Vector3.forward * _speed * gameManager.lvSpeed * Time.deltaTime);
@@ -52,14 +54,18 @@ public class MovementPlayer : MonoBehaviour
         }
     }
 
+    IEnumerator PauseToPlay()
+    {
+        yield return new WaitForSeconds(2f);
+        _isMoving = true;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Enemy"))
         {
-            //oyun bitti
-            //_isMoving = false;
-
+            _isMoving = false;
+            gameManager.GameOver();
         }
     }
     private void OnTriggerEnter(Collider other)
