@@ -1277,6 +1277,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6794183970491627709, guid: 37eaefe1eb69ba2499c03e8986f094cc, type: 3}
+      propertyPath: _lvSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794183970491627709, guid: 37eaefe1eb69ba2499c03e8986f094cc, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 1698535036}

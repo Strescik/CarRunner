@@ -22,10 +22,7 @@ public class WayManager : MonoBehaviour
             Destroy(instance);
         instance = this;
 
-        for (int i = 0; i < _startWayCount; i++)
-        {
-            Instantiate(_wayPrefab, NewPosition(), Quaternion.identity);
-        }
+        StartGame();
     }
 
     internal Vector3 NewPosition()
@@ -41,6 +38,7 @@ public class WayManager : MonoBehaviour
 
         if (_wayCount > 3)
             CreatStaticEnemy();
+
         if (_wayCount % 5 == 0 && GameManager.instance.lvSpeed <= 4)
             GameManager.instance.UpLvSpeed();
 
@@ -101,6 +99,14 @@ public class WayManager : MonoBehaviour
             default:
                 break;
 
+        }
+    }
+
+    private void StartGame()
+    {
+        for (int i = 0; i < _startWayCount; i++)
+        {
+            Instantiate(_wayPrefab, NewPosition(), Quaternion.identity);
         }
     }
 
